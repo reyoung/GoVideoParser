@@ -30,14 +30,32 @@ type IParserError interface {
 	Error() string
 }
 
-type VideoParseResult struct {
+type VideoParseResult interface {
+	GetURLS() []string
+	GetTitle() string
+	GetFileType() string
+}
+
+type YoukuVideoParseResult struct {
 	URLS     []string
 	Title    string
 	FileType string
 }
 
+func (r YoukuVideoParseResult) GetURLS() []string {
+	return r.URLS
+}
+
+func (r YoukuVideoParseResult) GetTitle() string {
+	return r.Title
+}
+
+func (r YoukuVideoParseResult) GetFileType() string {
+	return r.FileType
+}
+
 type IParser interface {
-	Parse(url string, defi DefinitionType) (*VideoParseResult, error)
+	Parse(url string, defi DefinitionType) (VideoParseResult, error)
 	GetType() ParserType
 }
 
@@ -63,7 +81,7 @@ func (YoukuParser) GetType() ParserType {
 	return PT_YOUKU
 }
 
-func (p YoukuParser) Parse(url string, defi DefinitionType) (*VideoParseResult, error) {
+func (p YoukuParser) Parse(url string, defi DefinitionType) (VideoParseResult, error) {
 	video_id, err := p.getVideoID(url)
 	if err != nil {
 		return nil, err
@@ -169,9 +187,10 @@ func (p YoukuParser) Parse(url string, defi DefinitionType) (*VideoParseResult, 
 		url := fmt.Sprintf("http://f.youku.com/player/getFlvPath/sid/00_%s/st/%s/fileid/%s%s%s?K=%s", no, file_type, vidlow, no, vidhigh, sm["k"].(string))
 		return_list = append(return_list, url)
 	}
-
-	return &VideoParseResult{
-		return_list, title, file_type}, nil
+	result := YoukuVideoParseResult{
+		return_list, title, file_type}
+	retv := VideoParseResult(result)
+	return retv, nil
 }
 
 func (YoukuParser) getTitleByGoQuery(doc *goquery.Document) string {

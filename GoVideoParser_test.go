@@ -27,11 +27,29 @@ func TestYoukuParse(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if result.Title != "2013.5.4 相声《金刚腿》 刘春山、许健、王玥波" {
+	if result.GetTitle() != "2013.5.4 相声《金刚腿》 刘春山、许健、王玥波" {
 		log.Fatal("Title Parse Error")
 	}
 
-	for _, url := range result.URLS {
+	if result.GetFileType() != "flv" {
+		log.Fatal("File Type Parse Error")
+	}
+
+	for _, url := range result.GetURLS() {
+		t.Log(url)
+	}
+
+	result, err = p.Parse("http://v.youku.com/v_show/id_XNTUzMTAxNzE2.html", DT_HIGH)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if result.GetTitle() != "2013.5.4 相声《金刚腿》 刘春山、许健、王玥波" {
+		log.Fatal("Title Parse Error of High Definition")
+	}
+
+	for _, url := range result.GetURLS() {
 		t.Log(url)
 	}
 }
