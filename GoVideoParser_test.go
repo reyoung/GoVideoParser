@@ -52,4 +52,9 @@ func TestYoukuParse(t *testing.T) {
 	for _, url := range result.GetURLS() {
 		t.Log(url)
 	}
+	if result.IsDownloadNeedCookies() == false {
+		t.Log("Cookies Is Not Needed")
+	} else {
+		log.Fatal("Youku Cookies Error!")
+	}
 }

@@ -22,6 +22,8 @@ type VideoParseResult interface {
 	GetURLS() []string
 	GetTitle() string
 	GetFileType() string
+	GetCookies() map[string]string
+	IsDownloadNeedCookies() bool
 }
 
 type IParser interface {

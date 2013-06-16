@@ -30,6 +30,14 @@ func (r YoukuVideoParseResult) GetFileType() string {
 	return r.FileType
 }
 
+func (r YoukuVideoParseResult) GetCookies() map[string]string {
+	return make(map[string]string)
+}
+
+func (r YoukuVideoParseResult) IsDownloadNeedCookies() bool {
+	return false
+}
+
 type YoukuParser struct {
 }
 
